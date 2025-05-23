@@ -1,37 +1,35 @@
-#A poorly written example of a program in Python. It prompts the user for the number of elements to sum, takes those integers as input, and handles some basic error cases
+# Improved version: cleaner structure, better error handling, avoids exit(), uses functions, and type hints
+
+from typing import List
 
 MAX = 100
 
-def calculate_sum(arr):
-   result = 0
-   for num in arr:
-      result += num
-   return result
+def calculate_sum(arr: List[int]) -> int:
+    return sum(arr)
+
+def get_integer(prompt: str, min_value: int = None, max_value: int = None) -> int:
+    while True:
+        try:
+            value = int(input(prompt))
+            if (min_value is not None and value < min_value) or (max_value is not None and value > max_value):
+                print(f"Please enter a number between {min_value} and {max_value}.")
+                continue
+            return value
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
 
 def main():
-   try:
-      n = int(input("Enter the number of elements (1-100): "))
-      if not 1 <= n <= MAX:
-            print("Invalid input. Please provide a digit ranging from 1 to 100.")
-            exit(1)
-
-      arr = []
-
-      print(f"Enter {n} integers:")
-      for _ in range(n):
-            try:
-               arr.append(int(input()))
-            except ValueError:
-               print("Invalid input. Please enter valid integers.")
-               exit(1)
-
-      total = calculate_sum(arr)
-
-      print("Sum of the numbers:", total)
-
-   except KeyboardInterrupt:
-      print("\nProgram terminated by user.")
-      exit(1)
+    try:
+        n = get_integer(f"Enter the number of elements (1-{MAX}): ", 1, MAX)
+        arr = []
+        print(f"Enter {n} integers:")
+        for i in range(n):
+            num = get_integer(f"Element {i+1}: ")
+            arr.append(num)
+        total = calculate_sum(arr)
+        print("Sum of the numbers:", total)
+    except KeyboardInterrupt:
+        print("\nProgram terminated by user.")
 
 if __name__ == "__main__":
-   main()
+    main()
